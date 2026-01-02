@@ -8,7 +8,7 @@ struct Question {
 
 struct Answer {
   address respondent;
-  uint8[] answers; 
+  uint8[] answers;
 }
 
 contract Survey {
@@ -16,6 +16,8 @@ contract Survey {
   string public description;
   uint256 public targetNumber;
   uint256 public rewardAmount;
+  bool testFlag;
+  int16 testInteger;
   // Questions
   Question[] questions;
   Answer[] answers;
@@ -23,13 +25,15 @@ contract Survey {
   constructor(
     string memory _title,
     string memory _description,
-    uint256 _targetNumber, 
+    uint256 _targetNumber,
     Question[] memory _questions
   ) payable {
     title = _title;
     description = _description;
     targetNumber = _targetNumber;
     rewardAmount = msg.value / _targetNumber;
+    testFlag = true;
+    testInteger = 10000;
     for (uint i = 0; i < _questions.length; i++) {
       questions.push(
         Question({
@@ -41,8 +45,11 @@ contract Survey {
   }
 
   function submitAnswer(Answer calldata _answer) external {
-    require(_answer.answers.length == questions.length, "Mismatched answers length");
-    require(answers.length <= targetNumber, "This survey has been ended");
+    require(
+      _answer.answers.length == questions.length,
+      "Mismatched answers length"
+    );
+    require(answers.length < targetNumber, "This survey has been ended");
     answers.push(
       Answer({respondent: _answer.respondent, answers: _answer.answers})
     );
