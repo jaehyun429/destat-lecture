@@ -5,7 +5,6 @@ struct Question {
   string question;
   string[] options;
 }
-
 struct Answer {
   address respondent;
   uint8[] answers;
@@ -16,9 +15,7 @@ contract Survey {
   string public description;
   uint256 public targetNumber;
   uint256 public rewardAmount;
-  bool testFlag;
-  int16 testInteger;
-  // Questions
+  // Q
   Question[] questions;
   Answer[] answers;
 
@@ -32,24 +29,27 @@ contract Survey {
     description = _description;
     targetNumber = _targetNumber;
     rewardAmount = msg.value / _targetNumber;
-    testFlag = true;
-    testInteger = 10000;
     for (uint i = 0; i < _questions.length; i++) {
       questions.push(
         Question({
           question: _questions[i].question,
           options: _questions[i].options
+          //string array deepcopy is available
         })
       );
+      // Question storage q = questions.push();
+      // q.question = _quesetions[i].question;
+      // q.options = _questions[i].options;
     }
   }
 
   function submitAnswer(Answer calldata _answer) external {
+    //length validation
     require(
       _answer.answers.length == questions.length,
       "Mismatched answers length"
     );
-    require(answers.length < targetNumber, "This survey has been ended");
+    require(answers.length < targetNumber, "This survey has been ended"); // 10th submit ->answer.length = 9
     answers.push(
       Answer({respondent: _answer.respondent, answers: _answer.answers})
     );
@@ -60,7 +60,7 @@ contract Survey {
     return answers;
   }
 
-  function getQuestions() external view returns (Question[] memory) {
+  function getQuestion() external view returns (Question[] memory) {
     return questions;
   }
 }

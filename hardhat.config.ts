@@ -11,6 +11,7 @@ export default defineConfig({
       production: {
         version: "0.8.28",
         settings: {
+          viaIR: true,
           optimizer: {
             enabled: true,
             runs: 200,
@@ -19,20 +20,26 @@ export default defineConfig({
       },
     },
   },
-  networks: {
-    hardhatMainnet: {
-      type: "edr-simulated",
-      chainType: "l1",
-    },
-    hardhatOp: {
-      type: "edr-simulated",
-      chainType: "op",
-    },
-    sepolia: {
-      type: "http",
-      chainType: "l1",
-      url: configVariable("SEPOLIA_RPC_URL"),
-      accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
-    },
+ networks: {
+  hardhatMainnet: {
+    type: "edr-simulated",
+    chainType: "l1",
   },
+  hardhatOp: {
+    type: "edr-simulated",
+    chainType: "op",
+  },
+  sepolia: {
+    type: "http",
+    chainType: "l1",
+    url: configVariable("SEPOLIA_RPC_URL"),
+    accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
+  },
+  kairos: {
+    type: "http",
+    chainType: "l1",
+    url: "https://public-en-kairos.node.kaia.io",
+    accounts: [configVariable("PRIVATE_KEY")],
+  },
+}
 });
